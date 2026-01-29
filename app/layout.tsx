@@ -2,8 +2,8 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Toaster } from '@/components/ui/toaster'
 import './globals.css'
-import { Geist, Geist_Mono } from 'some-font-library' // Assuming Geist and Geist_Mono are imported from a font library
 
 const cormorant = Cormorant_Garamond({ 
   subsets: ["latin"],
@@ -47,6 +47,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${cormorant.variable} font-sans antialiased`}>
         {children}
+        <Toaster />
         <Analytics />
       </body>
     </html>

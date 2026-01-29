@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Clock, Flame, Users, ArrowRight } from "lucide-react";
+import { Clock, Users, ArrowRight, Calendar } from "lucide-react";
+import { ReservationModal } from "./reservation-modal";
 
 const yogaClasses = [
   {
@@ -77,6 +78,13 @@ const filters = [
 
 export function YogaClasses() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [reservationOpen, setReservationOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<typeof yogaClasses[0] | null>(null);
+
+  const handleReservation = (yogaClass: typeof yogaClasses[0]) => {
+    setSelectedClass(yogaClass);
+    setReservationOpen(true);
+  };
 
   const filteredClasses = activeFilter === "all" 
     ? yogaClasses 
@@ -143,15 +151,34 @@ export function YogaClasses() {
                     <span>{yogaClass.participants} élèves</span>
                   </div>
                 </div>
-                <Button variant="ghost" className="w-full justify-between text-primary hover:text-primary hover:bg-secondary group/btn">
-                  Découvrir
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="ghost" 
+                    className="flex-1 justify-between text-primary hover:text-primary hover:bg-secondary group/btn"
+                  >
+                    Découvrir
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button 
+                    onClick={() => handleReservation(yogaClass)}
+                    size="icon"
+                    className="bg-primary hover:bg-primary/90"
+                  >
+                    <Calendar className="w-4 h-4" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
+
+      <ReservationModal 
+        open={reservationOpen}
+        onOpenChange={setReservationOpen}
+        courseName={selectedClass?.name}
+        courseType="studio"
+      />
     </section>
   );
 }

@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, MapPin, Check, Monitor, Calendar } from "lucide-react";
+import { ReservationModal } from "./reservation-modal";
 
 const videoFeatures = [
   "Accès illimité 24h/24",
@@ -18,6 +22,14 @@ const studioFeatures = [
 ];
 
 export function FormatsSection() {
+  const [reservationOpen, setReservationOpen] = useState(false);
+  const [reservationType, setReservationType] = useState<"video" | "studio">("studio");
+
+  const handleReservation = (type: "video" | "studio") => {
+    setReservationType(type);
+    setReservationOpen(true);
+  };
+
   return (
     <section id="formats" className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,7 +84,11 @@ export function FormatsSection() {
                 ))}
               </ul>
 
-              <Button size="lg" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+              <Button 
+                size="lg" 
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                onClick={() => handleReservation("video")}
+              >
                 <Play className="w-5 h-5" />
                 Commencer en ligne
               </Button>
@@ -123,7 +139,11 @@ export function FormatsSection() {
                 ))}
               </ul>
 
-              <Button size="lg" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground gap-2">
+              <Button 
+                size="lg" 
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground gap-2"
+                onClick={() => handleReservation("studio")}
+              >
                 <Calendar className="w-5 h-5" />
                 Réserver un cours
               </Button>
@@ -131,6 +151,13 @@ export function FormatsSection() {
           </div>
         </div>
       </div>
+
+      <ReservationModal 
+        open={reservationOpen}
+        onOpenChange={setReservationOpen}
+        courseName={reservationType === "video" ? "Cours en Ligne" : "Cours en Studio"}
+        courseType={reservationType}
+      />
     </section>
   );
 }
